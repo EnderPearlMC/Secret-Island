@@ -6,7 +6,10 @@ class HMMainMap:
 
     # construct method
     # @params game : screen variable stored in main.py to get game instance
-    def __init__(self):
+    def __init__(self, game):
+
+        self.game = game
+
         # font | Main font
         self.font = pygame.font.Font("assets/fonts/PermanentMarker.ttf", 35)
         # font2 | Second font
@@ -81,6 +84,12 @@ class HMMainMap:
 
         # add menu's elements
         self.add_elements()
+
+    # executed once menu started
+    def init(self):
+        # play music
+        pygame.mixer.music.stop()
+        self.game.play_file("assets/musics/nature.mp3")
 
     # add elements of the menu
     def add_elements(self):

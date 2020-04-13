@@ -16,10 +16,12 @@ class MainMenu:
         # font4 | 4th font
         self.font4 = pygame.font.SysFont("Arial", 20)
 
+        # play music
+        pygame.mixer.music.stop()
+        game.play_file("assets/musics/music1.mp3")
+
         # add menu's elements
         self.add_elements()
-        # play music
-        game.play_file("assets/musics/music1.mp3")
 
     # add elements of the menu
     def add_elements(self):
@@ -75,7 +77,7 @@ class MainMenu:
         # render play button text
         self.play_button_text = self.font2.render("PLAY", True, (255, 255, 255))
 
-        # reload background image
+        # reload coin image
         self.coin = pygame.image.load("assets/images/mainMenu/coin.png")
         # set the size of it
         self.coin = pygame.transform.scale(self.coin, (50, 50))

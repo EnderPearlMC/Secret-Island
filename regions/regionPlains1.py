@@ -58,12 +58,6 @@ class RegionPlains1(Region):
 
     def __init__(self):
         super().__init__(CityPlains1())
-        # self.popup = Popup("Jaaj", [
-        #     "Ce popup est vraiment",
-        #     "J'adore ce jaaj de",
-        #     "QUALITE"
-        # ])
 
     def update_draw(self, screen):
         pass
-        # self.popup.draw_popup(screen)

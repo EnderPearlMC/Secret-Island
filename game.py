@@ -48,7 +48,7 @@ class Game:
         self.hm_help1_menu = HMHelp1Menu(self)
 
         # hm_main_map | Stores the main map of the history mode
-        self.hm_main_map = HMMainMap()
+        self.hm_main_map = HMMainMap(self)
 
         # region_manager | Stores the region manager
         self.region_manager = RegionManager()

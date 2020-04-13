@@ -188,6 +188,7 @@ def mouse_button_up():
             else:
                 fade_out(screen.get_width(), screen.get_height(), 4)
                 game.state = State.HISTORY_MODE_MAIN_MAP
+                game.hm_main_map.init()
                 game.update(screen)
                 fade_in(screen.get_width(), screen.get_height(), 4)
     elif game.state == State.HISTORY_MODE_MAIN_MAP:
@@ -197,6 +198,7 @@ def mouse_button_up():
     elif game.state == State.HISTORY_MODE_REGION_MENU:
         if game.region_manager.current_region.is_return_button_clicked(pygame.mouse.get_pos()):
             game.state = State.HISTORY_MODE_MAIN_MAP
+            game.hm_main_map.init()
             game.region_manager.unload_current_region()
             game.hm_main_map.description_shown = False
             game.update(screen)
@@ -223,6 +225,7 @@ def key_up(e):
                 game.game_data.make_datas_as_file()
                 fade_out(screen.get_width(), screen.get_height(), 4)
                 game.state = State.HISTORY_MODE_MAIN_MAP
+                game.hm_main_map.init()
                 game.update(screen)
                 fade_in(screen.get_width(), screen.get_height(), 4)
 

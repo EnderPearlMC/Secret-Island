@@ -24,7 +24,10 @@ class RegionManager:
 
     # unloads the current region
     def unload_current_region(self):
+        self.current_region.city.is_one_category_shown = False
         self.current_region.city.loaded = False
+        for c in self.current_region.city.build_categories:
+            c['shown'] = False
         self.current_region = None
 
     # draws the current region's menu
