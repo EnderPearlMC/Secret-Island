@@ -7,9 +7,10 @@ from state import State
 pygame.init()
 
 # create window
-screen = pygame.display.set_mode((1280, 720), pygame.RESIZABLE)
-# set title of it   
-pygame.display.set_caption("Game")
+screen = pygame.display.set_mode((1000, 600), pygame.RESIZABLE)
+# set title of it
+pygame.display.set_caption("Secret Island")
+pygame.display.set_icon(pygame.image.load('assets/images/logo.png'))
 
 # ==========================================
 #   VARIABLES
@@ -18,7 +19,9 @@ pygame.display.set_caption("Game")
 # game_infos | Stores informations about the game
 game_infos = {
     "version": "Alpha 0.0.2",
-    "author": "EnderPearl MC and ProGamerXbox"
+    "author": "EnderPearl MC and ProGamerXbox",
+    "start_mode": "debug",
+    "start_point": State.HISTORY_MODE_MAIN_MAP
 }
 
 # running | true : the window is running / false : the window doesn't run anymore
@@ -30,8 +33,10 @@ FPS = 60
 # game | Stores class Games
 game = Game(screen, game_infos)
 
-main_menu_on = True
-
+if game_infos['start_mode'] == "release":
+    main_menu_on = False
+elif game_infos['start_mode'] == "debug" or game_infos['start_mode'] == "debug-music":
+    main_menu_on = True
 
 # add fade in animation
 def fade_in(w, h, speed):
@@ -68,7 +73,7 @@ def draw():
         # draw main menu
         screen.blit(game.main_menu.background, (0, 0))
         # draw title text
-        screen.blit(game.main_menu.title, (screen.get_width() / 2.4, screen.get_height() / 3))
+        screen.blit(game.main_menu.title, (screen.get_width() / 2 - game.main_menu.title.get_width() / 2, screen.get_height() / 3))
         # draw play button
         screen.blit(game.main_menu.play_button, game.main_menu.play_button_rect)
         # draw play button text
@@ -173,23 +178,24 @@ def draw():
 def mouse_button_up():
     if game.state == State.MAIN_MENU:
         if game.main_menu.is_play_button_pressed(pygame.mouse.get_pos()):
-            fade_out(screen.get_width(), screen.get_height(), 4)
+            fade_out(screen.get_width(), screen.get_height(), 2 * game.deltaTime)
             game.state = State.SECOND_MENU
             game.second_menu.init(screen)
             game.update(screen)
-            fade_in(screen.get_width(), screen.get_height(), 4)
+            fade_in(screen.get_width(), screen.get_height(), 2 * game.deltaTime)
     elif game.state == State.SECOND_MENU:
         if game.second_menu.is_history_mode_button_pressed(pygame.mouse.get_pos()):
             if game.game_data.data_player['history_mode']['adv_help'] == 1:
-                fade_out(screen.get_width(), screen.get_height(), 4)
+                fade_out(screen.get_width(), screen.get_height(), 4 * game.deltaTime)
                 game.state = State.HISTORY_MODE_START_HELP
                 game.update(screen)
-                fade_in(screen.get_width(), screen.get_height(), 4)
+                fade_in(screen.get_width(), screen.get_height(), 4 * game.deltaTime)
             else:
-                fade_out(screen.get_width(), screen.get_height(), 4)
+                fade_out(screen.get_width(), screen.get_height(), 4 * game.deltaTime)
                 game.state = State.HISTORY_MODE_MAIN_MAP
+                game.hm_main_map.init()
                 game.update(screen)
-                fade_in(screen.get_width(), screen.get_height(), 4)
+                fade_in(screen.get_width(), screen.get_height(), 4 * game.deltaTime)
     elif game.state == State.HISTORY_MODE_MAIN_MAP:
         if game.hm_main_map.is_go_button_clicked(pygame.mouse.get_pos()):
             game.region_manager.load_region(game.hm_main_map.selected_region)
@@ -197,6 +203,7 @@ def mouse_button_up():
     elif game.state == State.HISTORY_MODE_REGION_MENU:
         if game.region_manager.current_region.is_return_button_clicked(pygame.mouse.get_pos()):
             game.state = State.HISTORY_MODE_MAIN_MAP
+            game.hm_main_map.init()
             game.region_manager.unload_current_region()
             game.hm_main_map.description_shown = False
             game.update(screen)
@@ -221,14 +228,17 @@ def key_up(e):
             else:
                 game.game_data.data_player['history_mode']['adv_help'] = 2
                 game.game_data.make_datas_as_file()
-                fade_out(screen.get_width(), screen.get_height(), 4)
+                fade_out(screen.get_width(), screen.get_height(), 4 * game.deltaTime)
                 game.state = State.HISTORY_MODE_MAIN_MAP
+                game.hm_main_map.init()
                 game.update(screen)
-                fade_in(screen.get_width(), screen.get_height(), 4)
+                fade_in(screen.get_width(), screen.get_height(), 4 * game.deltaTime)
 
 
 # Main loop which updates all parts of the game
 while running:
+
+    game.deltaTime = clock.tick(FPS) / 100
 
     # hovers things of the menus
     if game.state == State.MAIN_MENU:
@@ -296,7 +306,5 @@ while running:
             game.update_video_resize(screen)
 
     if not main_menu_on:
-        fade_in(screen.get_width(), screen.get_height(), 2)
+        fade_in(screen.get_width(), screen.get_height(), 2 * game.deltaTime)
         main_menu_on = True
-
-    clock.tick(FPS)

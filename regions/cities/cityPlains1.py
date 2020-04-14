@@ -10,31 +10,11 @@ class CityPlains1(City):
     def yaml_name(self):
         return "region_plains_1"
 
-    def plots(self):
-        return [
-            {
-                "id": 1,
-                "cells": [
-                    {
-                        "x_cell": 2,
-                        "y_cell": 2
-                    }
-                ]
-            },
-            {
-                "id": 2,
-                "cells": [
-                    {
-                        "x_cell": 5,
-                        "y_cell": 3
-                    },
-                    {
-                        "x_cell": 6,
-                        "y_cell": 3
-                    }
-                ]
-            }
-        ]
+    def unlocked_items(self):
+        return {
+            "Ground": [0, 1],
+            "Builds": []
+        }
 
     # construct method
     def __init__(self):
