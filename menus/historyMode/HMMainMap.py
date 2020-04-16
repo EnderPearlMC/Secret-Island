@@ -6,7 +6,10 @@ class HMMainMap:
 
     # construct method
     # @params game : screen variable stored in main.py to get game instance
-    def __init__(self):
+    def __init__(self, game):
+
+        self.game = game
+
         # font | Main font
         self.font = pygame.font.Font("assets/fonts/PermanentMarker.ttf", 35)
         # font2 | Second font
@@ -79,8 +82,17 @@ class HMMainMap:
         # selected_region | Selected region
         self.selected_region = None
 
+        if self.game.game_infos['start_mode'] == "debug-music":
+            self.init()
+
         # add menu's elements
         self.add_elements()
+
+    # executed once menu started
+    def init(self):
+        # play music
+        pygame.mixer.music.stop()
+        self.game.play_file("assets/musics/nature.mp3")
 
     # add elements of the menu
     def add_elements(self):
@@ -132,10 +144,10 @@ class HMMainMap:
         if self.description_shown:
             self.cross_rect.x = screen.get_width() / 2 - self.cross.get_width() / 2
             self.cross_rect.y = len(self.descriptions) * 50 + (screen.get_height() / 2.5 - self.cross.get_height())
-            
+
             self.go_button_rect.x = screen.get_width() / 2 - self.go_button.get_width() / 2
             self.go_button_rect.y = (screen.get_height() / 2.5 - self.go_button.get_height()) - 60
-            
+
         elif self.locked_shown:
             self.cross_rect.x = screen.get_width() / 2 - self.cross.get_width() / 2
             self.cross_rect.y = 50 + (screen.get_height() / 2 - self.cross.get_height())
@@ -167,7 +179,7 @@ class HMMainMap:
     # shows the description of a region and draw a go button
     # @param region : The region that will be used
     def show_description(self, region):
-        self.selected_region = region['id'] 
+        self.selected_region = region['id']
         self.locked_shown = False
         if not self.description_shown:
             self.descriptions.clear()
@@ -176,7 +188,7 @@ class HMMainMap:
                 des = self.font.render(p, True, (255, 255, 255))
                 self.descriptions.append(des)
             self.description_shown = True
-    
+
     # return which region go button is clicked
     # @param pos : the position of the mouse
     def is_go_button_clicked(self, pos):
@@ -186,7 +198,7 @@ class HMMainMap:
     # When hovered
     # @param pos : the position of the mouse
     def hover(self, pos):
-        
+
         if self.go_button_rect.collidepoint(pos):
             self.go_button = pygame.transform.scale(pygame.image.load('assets/images/buttonPressed.png'), (100, 60))
             self.go_button_rect = self.go_button.get_rect()
