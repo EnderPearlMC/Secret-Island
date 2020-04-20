@@ -41,7 +41,7 @@ class HMHelp1Menu:
         self.p2 = self.font2.render("...on an island.", True, (238, 82, 83))
         self.p3 = self.font2.render("This island contains many regions...", True, (238, 82, 83))
         self.p4 = self.font2.render("...where you could build, fight...", True, (238, 82, 83))
-        self.p5 = self.font2.render("with peoples. Someone (you don't know)...", True, (238, 82, 83))
+        self.p5 = self.font2.render("...with peoples. Someone (you don't know)...", True, (238, 82, 83))
         self.p6 = self.font2.render("...asked you to explore this island...", True, (238, 82, 83))
         self.p7 = self.font2.render("...to see what is there.", True, (238, 82, 83))
         self.p8 = self.font2.render("Are you ready?", True, (238, 82, 83))

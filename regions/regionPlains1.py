@@ -58,12 +58,15 @@ class RegionPlains1(Region):
 
     def __init__(self):
         super().__init__(CityPlains1())
-        # self.popup = Popup("Jaaj", [
-        #     "Ce popup est vraiment",
-        #     "J'adore ce jaaj de",
-        #     "QUALITE"
-        # ])
+
+        self.explain = Popup("Help", [
+            "Here is the menu of a region.",
+            "The quests are represented by",
+            "padlocks. You'll have to do them !"
+        ])
 
     def update_draw(self, screen):
-        pass
-        # self.popup.draw_popup(screen)
+        self.explain.draw_popup(screen)
+
+    def mouse_event(self, e):
+        self.explain.click(e)

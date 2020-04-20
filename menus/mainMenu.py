@@ -1,3 +1,5 @@
+import random
+
 import pygame
 
 
@@ -16,15 +18,18 @@ class MainMenu:
         # font4 | 4th font
         self.font4 = pygame.font.SysFont("Arial", 20)
 
+        # play music
+        pygame.mixer.music.stop()
+        game.play_file("assets/musics/music1.mp3")
+
         # add menu's elements
         self.add_elements()
-        # play music
-        game.play_file("assets/musics/music1.mp3")
 
     # add elements of the menu
     def add_elements(self):
         # background | Stores background image
         self.background = pygame.image.load("assets/images/mainMenu/background.jpg")
+        self.sun = pygame.image.load("assets/images/sunlight.png")
         # title | Stores title text
         self.title = self.font3.render("GAME", True, (46, 204, 113))
         # play_button | Stores play button image
@@ -57,7 +62,7 @@ class MainMenu:
     def update(self, screen, game):
 
         # render title text
-        self.title = self.font3.render("GAME", True, (46, 204, 113))
+        self.title = self.font3.render("SECRET ISLAND", True, (46, 204, 113))
         # render coin amount text
         self.coin_amount_text = self.font.render(str(game.game_data.data_player["money"]), True, (255, 255, 255))
         # render coin amount text
@@ -69,13 +74,15 @@ class MainMenu:
 
         # reload background image
         self.background = pygame.image.load("assets/images/mainMenu/background.jpg")
+        self.sun = pygame.image.load("assets/images/sunlight.png")
         # set the size of it
         self.background = pygame.transform.scale(self.background, (screen.get_width(), screen.get_height()))
+        self.sun = pygame.transform.scale(self.sun, (screen.get_width(), screen.get_height()))
 
         # render play button text
         self.play_button_text = self.font2.render("PLAY", True, (255, 255, 255))
 
-        # reload background image
+        # reload coin image
         self.coin = pygame.image.load("assets/images/mainMenu/coin.png")
         # set the size of it
         self.coin = pygame.transform.scale(self.coin, (50, 50))

@@ -76,6 +76,13 @@ class Region():
         """
         raise NotImplementedError('You must implement this method')
 
+    @abc.abstractmethod
+    def mouse_event(self, e):
+        """
+            Must return the code that will be executed when mouse click event
+        """
+        raise NotImplementedError('You must implement this method')
+
     # ================================================================ #
     # ================================================================ #
 
@@ -218,3 +225,6 @@ class Region():
     def is_city_button_clicked(self, pos):
         # if city button clicked
         return self.city_button_rect.collidepoint(pos)
+
+    def mouse_button_up(self, e):
+        self.mouse_event(e)

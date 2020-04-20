@@ -6,7 +6,10 @@ class HMMainMap:
 
     # construct method
     # @params game : screen variable stored in main.py to get game instance
-    def __init__(self):
+    def __init__(self, game):
+
+        self.game = game
+
         # font | Main font
         self.font = pygame.font.Font("assets/fonts/PermanentMarker.ttf", 35)
         # font2 | Second font
@@ -29,7 +32,8 @@ class HMMainMap:
                 ],
                 "unlocked": False,
                 "image": None,
-                "rect": None
+                "rect": None,
+                "angle": 0
             },
             {
                 "id": 2,
@@ -41,7 +45,8 @@ class HMMainMap:
                 ],
                 "unlocked": False,
                 "image": None,
-                "rect": None
+                "rect": None,
+                "angle": 0
             },
             {
                 "id": 3,
@@ -54,7 +59,8 @@ class HMMainMap:
                 ],
                 "unlocked": False,
                 "image": None,
-                "rect": None
+                "rect": None,
+                "angle": 0
             }
         ]
 
@@ -79,8 +85,17 @@ class HMMainMap:
         # selected_region | Selected region
         self.selected_region = None
 
+        if self.game.game_infos['start_mode'] == "debug-music":
+            self.init()
+
         # add menu's elements
         self.add_elements()
+
+    # executed once menu started
+    def init(self):
+        # play music
+        pygame.mixer.music.stop()
+        self.game.play_file("assets/musics/nature.mp3")
 
     # add elements of the menu
     def add_elements(self):
@@ -106,9 +121,8 @@ class HMMainMap:
                 r['image'] = pygame.image.load('assets/images/lock.png')
                 r['image'] = pygame.transform.scale(r['image'], (50, 50))
 
-            r['rect'] = r['image'].get_rect()
-
             # set size
+            r['rect'] = r['image'].get_rect()
             if r['id'] == 1:
                 r['rect'].x = screen.get_width() / 2.9
                 r['rect'].y = screen.get_height() / 1.2
@@ -118,6 +132,17 @@ class HMMainMap:
             elif r['id'] == 3:
                 r['rect'].x = screen.get_width() / 3.4
                 r['rect'].y = screen.get_height() / 1.7
+
+            if r['id'] == game.game_data.data_player['history_mode']['region']['current_region']:
+                r['angle'] += 5 * game.deltaTime
+                r['light_around'] = pygame.image.load('assets/images/lightAround.png')
+                r['light_around'] = pygame.transform.scale(r['light_around'], (100, 100))
+                r['light_around'], r['light_around_rect'] = self.rot_center(r['light_around'], r['angle'])
+                r['light_around_rect'].center = (r['rect'].x + 35, r['rect'].y + 33)
+
+            """if r['id'] == game.game_data.data_player['history_mode']['region']['current_region']:
+                r['light_around_rect'].x = r['rect'].x - 15
+                r['light_around_rect'].y = r['rect'].y - 15"""
 
         # reload background image
         self.background = pygame.image.load('assets/images/historyMode/mainMap.png')
@@ -132,10 +157,10 @@ class HMMainMap:
         if self.description_shown:
             self.cross_rect.x = screen.get_width() / 2 - self.cross.get_width() / 2
             self.cross_rect.y = len(self.descriptions) * 50 + (screen.get_height() / 2.5 - self.cross.get_height())
-            
+
             self.go_button_rect.x = screen.get_width() / 2 - self.go_button.get_width() / 2
             self.go_button_rect.y = (screen.get_height() / 2.5 - self.go_button.get_height()) - 60
-            
+
         elif self.locked_shown:
             self.cross_rect.x = screen.get_width() / 2 - self.cross.get_width() / 2
             self.cross_rect.y = 50 + (screen.get_height() / 2 - self.cross.get_height())
@@ -167,7 +192,7 @@ class HMMainMap:
     # shows the description of a region and draw a go button
     # @param region : The region that will be used
     def show_description(self, region):
-        self.selected_region = region['id'] 
+        self.selected_region = region['id']
         self.locked_shown = False
         if not self.description_shown:
             self.descriptions.clear()
@@ -176,7 +201,7 @@ class HMMainMap:
                 des = self.font.render(p, True, (255, 255, 255))
                 self.descriptions.append(des)
             self.description_shown = True
-    
+
     # return which region go button is clicked
     # @param pos : the position of the mouse
     def is_go_button_clicked(self, pos):
@@ -186,10 +211,18 @@ class HMMainMap:
     # When hovered
     # @param pos : the position of the mouse
     def hover(self, pos):
-        
+
         if self.go_button_rect.collidepoint(pos):
             self.go_button = pygame.transform.scale(pygame.image.load('assets/images/buttonPressed.png'), (100, 60))
             self.go_button_rect = self.go_button.get_rect()
         else:
             self.go_button = pygame.transform.scale(pygame.image.load('assets/images/button.png'), (100, 60))
             self.go_button_rect = self.go_button.get_rect()
+
+    def rot_center(self, image, angle):
+
+        center = image.get_rect().center
+        rotated_image = pygame.transform.rotate(image, angle)
+        new_rect = rotated_image.get_rect(center=center)
+
+        return rotated_image, new_rect
